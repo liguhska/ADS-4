@@ -32,7 +32,7 @@ int countPairs2(int* arr, int len, int value) {
       int right_dup = 1;
       while (right_dup - 1 < left && arr[right] == arr[right - 1]) {
         right--;
-        right_dup--;
+        right_dup++;
       }
       count += left_dup * right_dup;
       left++;
@@ -69,16 +69,12 @@ int countPairs3(int* arr, int len, int value) {
     while (index != -1) {
       count++;
       int temp = index + 1;
-      while (temp < i && arr[temp] == result) {
-        count++;
-        temp--;
-      }
-      temp = index + 1;
       while (temp < len && arr[temp] == result) {
         count++;
         temp++;
       }
+      break;
+      }
     }
-  }
   return count;
 }
