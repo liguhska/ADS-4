@@ -34,42 +34,39 @@ int countPairs2(int* arr, int len, int value) {
 
 int countPairs3(int* arr, int len, int value) {
     int count = 0;
-    int i = 0;
-    while (i < len - 1) {
-        if (i == 0 || arr[i] != arr[i - 1]) {
-            int x = value - arr[i];
-            if (x >= 0) {
-                int left = i + 1;
-                int right = len - 1;
-                int found_pos = -1;
-                while (left <= right) {
-                    int middle = left + (right - left) / 2;
-                    if (arr[middle] == x) {
-                        if (middle > left && arr[middle - 1] == x) {
-                            right = middle - 1;
-                        }
-                        else {
-                            found_pos = middle;
-                            break;
-                        }
-                    }
-                    else if (arr[middle] < x) {
-                        left = middle + 1;
-                    }
-                    else {
-                        right = middle - 1;
-                    }
-                }
-                if (found_pos != -1) {
-                    count++;
-                    while (found_pos + 1 < len && arr[found_pos + 1] == x) {
-                        count++;
-                        found_pos++;
-                    }
-                }
+    for (int i = 0; i < len - 1; i++) {
+        if (i > 0 && arr[i] == arr[i - 1]) continue;
+        int x = value - arr[i];
+        if (x < 0) continue;
+        int l = i + 1;
+        int hight = len - 1;
+        int first = -1;
+        while (l <= hight) {
+            int middle = l + (hight - l) / 2;
+            if (arr[middle] >= x) {
+                if (arr[middle] == x) first = middle;
+                hight = middle - 1;
+            }
+            else {
+                l = middle + 1;
             }
         }
-        i++;
+        if (first != -1) {
+            l = first;
+            hight = len - 1;
+            int last = first;
+            while (l <= hight) {
+                int middle = l + (hight - l) / 2;
+                if (arr[middle] <= x) {
+                    if (arr[middle] == x) last = middle;
+                    l = middle + 1;
+                }
+                else {
+                    hight = middle - 1;
+                }
+            }
+            count += (last - first + 1);
+        }
     }
     return count;
 }
