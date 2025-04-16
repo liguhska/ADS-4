@@ -35,32 +35,44 @@ int countPairs2(int* arr, int len, int value) {
   return count;
 }
 
-int binarySearch(int* arr, int left, int right, int x) {
-    while (left <= right) {
-        int middle = (left + right) / 2;
-        if (arr[middle] == x)
-            return middle;
-        else if (x < arr[middle])
-            right = middle - 1;
-        else
-            left = middle + 1;
-    }
-    return -1;
-}
-
 int countPairs3(int* arr, int len, int value) {
     int count = 0;
-
-    for (int i = 0; i < len - 1; i++) {
-        int result = value - arr[i];
-        int index = binarySearch(arr, i + 1, len - 1, result);
-        while (index != -1) {
-            count++;
-            while (index + 1 < len && arr[index] == arr[index + 1]) {
-                count++;
-                index++;
+    int i = 0;
+    while (i < len - 1) {
+        if (i == 0 || arr[i] != arr[i - 1]) {
+            int x = value - arr[i];
+            if (x >= 0) {
+                int left = i + 1;
+                int right = len - 1;
+                int found_pos = -1;
+                while (left <= right) {
+                    int middle = left + (right - left) / 2;
+                    if (arr[middle] == x) {
+                        if (middle > left && arr[middle - 1] == x) {
+                            right = middle - 1;
+                        }
+                        else {
+                            found_pos = middle;
+                            break;
+                        }
+                    }
+                    else if (arr[middle] < x) {
+                        left = middle + 1;
+                    }
+                    else {
+                        right = middle - 1;
+                    }
+                }
+                if (found_pos != -1) {
+                    count++;
+                    while (found_pos + 1 < len && arr[found_pos + 1] == x) {
+                        count++;
+                        found_pos++;
+                    }
+                }
             }
         }
+        i++;
     }
     return count;
 }
